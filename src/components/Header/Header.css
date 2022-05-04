@@ -1,0 +1,12 @@
+.header {
+  padding: 18px 70px;
+}
+
+.header_colored {
+  background-color: #073042;
+}
+
+.header__container {
+  display: flex;
+  align-items: center;
+}

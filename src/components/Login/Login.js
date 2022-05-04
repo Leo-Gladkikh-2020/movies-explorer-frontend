@@ -2,11 +2,9 @@
 import React from 'react';
 import './Login.css';
 
-function Login() {
+export default function Login() {
   return (
     <section className="login">
     </section>
   );
 }
-
-export default Login;

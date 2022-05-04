@@ -1,11 +1,9 @@
 import React from 'react';
 import './MoviesCardList.css';
 
-function MoviesCardList() {
+export default function MoviesCardList() {
   return (
     <section className="movies-card-list">
     </section>
   );
 }
-
-export default MoviesCardList;

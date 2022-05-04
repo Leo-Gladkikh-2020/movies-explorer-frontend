@@ -1,11 +1,9 @@
 import React from 'react';
 import './FilterCheckbox.css';
 
-function FilterCheckbox() {
+export default function FilterCheckbox() {
   return (
     <section className="filter-checkbox">
     </section>
   );
 }
-
-export default FilterCheckbox;

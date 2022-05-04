@@ -1,11 +1,9 @@
 import React from 'react';
 import './SavedMovies.css';
 
-function SavedMovies() {
+export default function SavedMovies() {
   return (
     <section className="save-movies">
     </section>
   );
 }
-
-export default SavedMovies;

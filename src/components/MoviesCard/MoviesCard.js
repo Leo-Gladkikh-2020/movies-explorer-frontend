@@ -1,11 +1,9 @@
 import React from 'react';
 import './MoviesCard.css';
 
-function MoviesCard() {
+export default function MoviesCard() {
   return (
     <section className="movies-card">
     </section>
   );
 }
-
-export default MoviesCard;
