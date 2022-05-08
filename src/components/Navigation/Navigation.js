@@ -1,12 +1,11 @@
 import React from 'react';
-import { NavLink } from 'react-router-dom';
 import './Navigation.css';
 
-export default function Navigation({ isLoggedIn }) {
+function Navigation() {
   return (
     <nav className="navigation">
-      <NavLink className="navigation__registration" to="/signup">Регистрация</NavLink>
-      <NavLink className="navigation__login" to="/signin">Войти</NavLink>
-    </nav >
+    </nav>
   );
 }
+
+export default Navigation;

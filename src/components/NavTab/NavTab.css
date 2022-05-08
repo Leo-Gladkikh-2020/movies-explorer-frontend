@@ -13,8 +13,16 @@
   font-weight: 500;
   color: #fff;
   text-decoration: underline;
+  transition: opacity 0.3s ease;
+  cursor: pointer;
 }
 
 .nav-tab__link:last-child {
   padding-right: 0;
+}
+
+.nav-tab__link:hover {
+  opacity: .8;
+  color: #3DDC84;
+  text-decoration: none;
 }

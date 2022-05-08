@@ -1,44 +1,64 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Route, Switch } from 'react-router-dom';
 import Header from '../Header/Header';
 import Main from '../Main/Main';
 import Footer from '../Footer/Footer';
+import LandingPage from '../LandingPage/LandingPage';
+import Movies from '../Movies/Movies';
+import SavedMovies from '../SavedMovies/SavedMovies';
+import Profile from '../Profile/Profile';
 import Login from '../Login/Login';
 import Register from '../Register/Register';
 import NotFound from '../NotFound/NotFound';
 import './App.css';
-import { CurrentUserContext } from '../../contexts/CurrentUserContext'
 
 export default function App() {
-  const [currentUser, setCurrentUser] = useState({});
-  const [loggedIn, setLoggedIn] = useState(false);
-
   return (
-    <CurrentUserContext.Provider value={currentUser}>
-      <div className="page">
-        <Header isLoggedIn={loggedIn} />
-        <Switch>
-          <Route exact path="/">
-            <Main />
-          </Route>
-          <Route path="/movies">
-          </Route>
-          <Route path="/saved-movies">
-          </Route>
-          <Route path="/profile">
-          </Route>
-          <Route path="/signin">
+    <div className="page">
+      <Switch>
+        <Route exact path="/">
+          <Header path="/" />
+          <Main>
+            <LandingPage />
+          </Main>
+          <Footer />
+        </Route>
+        <Route path="/movies">
+          <Header />
+          <Main>
+            <Movies />
+          </Main>
+          <Footer />
+        </Route>
+        <Route path="/saved-movies">
+          <Header />
+          <Main>
+            <SavedMovies />
+          </Main>
+          <Footer />
+        </Route>
+        <Route path="/profile">
+          <Header />
+          <Main>
+            <Profile />
+          </Main>
+        </Route>
+        <Route path="/signin">
+          <Main>
             <Login />
-          </Route>
-          <Route path="/signup">
+          </Main>
+        </Route>
+        <Route path="/signup">
+          <Main>
             <Register />
-          </Route>
-          <Route path="*">
+          </Main>
+        </Route>
+        <Route path="*">
+          <Main>
             <NotFound />
-          </Route>
-        </Switch>
-        <Footer />
-      </div>
-    </CurrentUserContext.Provider>
+          </Main>
+        </Route>
+      </Switch>
+    </div>
   );
 }

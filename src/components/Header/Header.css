@@ -2,11 +2,122 @@
   padding: 18px 70px;
 }
 
-.header_colored {
+.header__color {
   background-color: #073042;
 }
 
 .header__container {
   display: flex;
   align-items: center;
+}
+
+.header__navigation {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  flex-grow: 1;
+}
+
+.header__registration {
+  padding-right: 30px;
+  font-size: 12px;
+  line-height: 16px;
+  font-weight: 500;
+  color: #fff;
+  text-decoration: none;
+}
+
+.header__login {
+  padding: 8px 20px;
+  background-color: #3ddc84;
+  font-size: 12px;
+  line-height: 16px;
+  font-weight: 500;
+  color: #000;
+  text-decoration: none;
+  border-radius: 3px;
+}
+
+.header__navigation-movies {
+  padding: 0 0 0 44px;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  flex-grow: 1;
+}
+
+.header__movies {
+  font-size: 13px;
+  line-height: 18px;
+  font-weight: 500;
+  color: #fff;
+  text-align: right;
+  text-decoration: none;
+}
+
+.header__saved-movies {
+  padding-left: 16px;
+  font-size: 13px;
+  line-height: 18px;
+  color: #fff;
+  text-align: right;
+  text-decoration: none;
+}
+
+.header__saved-movies:first-child {
+  padding-left: 0;
+}
+
+.header__navigation-profile {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  flex-grow: 1;
+}
+
+.header__profile {
+  font-size: 13px;
+  line-height: 12px;
+  font-weight: 500;
+  color: #fff;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+}
+
+.header__profile-icon {
+  display: block;
+  margin-left: 7px;
+  width: 26px;
+  height: 26px;
+  background-color: #313131;
+  background-image: url('../../images/profile-icon.svg');
+  background-repeat: no-repeat;
+  background-position: center;
+  border-radius: 50px;
+}
+
+.header__logo {
+  display: block;
+  width: 38px;
+  height: 38px;
+  background-image: url('../../images/logo.svg');
+  background-repeat: no-repeat;
+  background-position: center;
+  cursor: pointer;
+  transition: opacity 0.3s ease;
+}
+
+.header__logo:hover {
+  transform: scale(1.1);
+  opacity: .8;
+}
+
+.hover-link {
+  cursor: pointer;
+  transition: opacity 0.3s ease;
+}
+
+.hover-link:hover {
+  opacity: .8;
 }

@@ -37,11 +37,12 @@
   color: #fff;
   letter-spacing: -0.04em;
   text-decoration: none;
-  transition: 0.2s all ease;
+  cursor: pointer;
+  transition: opacity 0.3s ease;
 }
 
 .portfolio__link:hover {
-  opacity: 0.6;
+  opacity: .8;
   color: #3DDC84;
 }
 

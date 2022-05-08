@@ -71,6 +71,13 @@
   font-weight: 500;
   color: #fff;
   text-decoration: none;
+  cursor: pointer;
+  transition: opacity 0.3s ease;
+}
+
+.about-me__link:hover {
+  opacity: .8;
+  color: #3DDC84;
 }
 
 .about-me__photo {
