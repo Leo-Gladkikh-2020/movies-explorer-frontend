@@ -1,6 +1,7 @@
 .about-me {
-  padding: 110px 70px 0;
-  background-color: #202020;
+  width: calc(100% - 140px);
+  margin: 0 auto;
+  padding: 110px 0 0;
 }
 
 .about-me__title {

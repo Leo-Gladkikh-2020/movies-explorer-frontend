@@ -1,6 +1,7 @@
 .about-project {
-  background-color: #202020;
-  padding: 110px 70px;
+  width: calc(100% - 140px);
+  margin: 0 auto;
+  padding: 110px 0;
 }
 
 .about-project__title {

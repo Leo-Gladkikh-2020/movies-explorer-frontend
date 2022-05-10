@@ -1,6 +1,7 @@
 .portfolio {
-  padding: 100px 70px 125px;
-  background-color: #202020;
+  width: calc(100% - 140px);
+  margin: 0 auto;
+  padding: 100px 0 125px;
 }
 
 .portfolio__title {

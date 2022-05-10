@@ -5,14 +5,25 @@ import './SearchForm.css';
 export default function SearchForm() {
   return (
     <section className="search-form">
-      <form className="search-form__form">
-        <div className="search-form__input-wrap">
-          <input className="search-form__input" type="text" name="movie" placeholder="Фильм"></input>
-          <button className="search-form__submit" type="submit">Найти</button>
-        </div>
-        <div className="search-form__filter">
+      <form className="search-form__container">
+        <fieldset className="search-form__form">
+          <input
+            className="search-form__input"
+            type="text"
+            id="movie"
+            name="movie"
+            placeholder="Фильм"
+            minLength="3"
+            maxLength="100"
+            required
+          />
+          <span className="search-form__error" id="movie-error"></span>
+          <button className="search-form__btn" type="submit"></button>
+        </fieldset>
+        <fieldset className="search-form__checkbox">
+          <span className="search-form__span">Короткометражки</span>
           <FilterCheckbox />
-        </div>
+        </fieldset>
       </form>
     </section>
   );

@@ -1,5 +1,7 @@
 .movies-card-list {
-  padding: 70px 70px 0;
+  width: calc(100% - 140px);
+  margin: 0 auto;
+  margin-top: 10px;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -10,8 +12,9 @@
   grid-template-columns: repeat(3, auto);
   row-gap: 30px;
   column-gap: 24px;
+  margin: 0;
+  padding: 0;
   list-style: none;
-  margin-bottom: 10px;
 }
 
 .movies-card-list__more-btn {
