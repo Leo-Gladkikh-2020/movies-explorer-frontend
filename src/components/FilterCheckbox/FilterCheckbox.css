@@ -1,7 +1,7 @@
 .switch {
   width: 36px;
   height: 20px;
-  position: relative;
+  position: absolute;
   display: inline-block;
   cursor: pointer;
 }
@@ -10,6 +10,7 @@
   width: 1px;
   height: 1px;
   clip: rect(0 0 0 0);
+  position: absolute;
 }
 
 .switch__span {

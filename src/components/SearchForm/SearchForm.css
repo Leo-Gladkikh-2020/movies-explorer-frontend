@@ -23,9 +23,10 @@
 
 .search-form__input {
   width: 100%;
+  padding-left: 22px;
   font-size: 14px;
   line-height: 18px;
-  color: #8b8b8b;
+  color: #fff;
   background-color: #202020;
   border: none;
   outline: none;

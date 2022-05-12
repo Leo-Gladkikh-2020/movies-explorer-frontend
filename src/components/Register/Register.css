@@ -37,6 +37,11 @@
 }
 
 .form__label {
+  display: flex;
+  flex-direction: column;
+}
+
+.form__label-text {
   padding-bottom: 10px;
   font-size: 10px;
   line-height: 12px;
