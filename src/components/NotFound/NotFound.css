@@ -38,3 +38,22 @@
 .not-found__back:hover {
   opacity: .6;
 }
+
+@media screen and (max-width: 767px) {
+  .not-found__title {
+    font-size: 80px;
+    line-height: 97px;
+  }
+
+  .not-found__subtitle {
+    padding-top: 10px;
+    font-size: 12px;
+    line-height: 15px;
+  }
+
+  .not-found__back {
+    bottom: 30px;
+    font-size: 12px;
+    line-height: 15px;
+  }
+}

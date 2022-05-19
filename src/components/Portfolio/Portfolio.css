@@ -51,12 +51,56 @@
   position: absolute;
   content: '';
   right: 0;
-  top: 50%;
-  width: 25px;
-  height: 25px;
+  width: 29px;
+  height: 60px;
   background-image: url('../../images/icon-link.svg');
   background-repeat: no-repeat;
   background-position: center;
   background-size: contain;
   pointer-events: none;
+}
+
+@media screen and (max-width: 1023px) {
+  .portfolio {
+    width: calc(100% - 100px);
+    padding: 90px 0;
+  }
+
+  .portfolio__title {
+    color: #A0A0A0;
+  }
+
+  .portfolio__list-item {
+    border-bottom: 1px solid #E6E6E6;
+  }
+
+  .portfolio__link {
+    font-size: 28px;
+  }
+
+  .portfolio__list-item::after {
+    width: 27px;
+  }
+}
+
+@media screen and (max-width: 767px) {
+  .portfolio {
+    width: calc(100% - 28px);
+    padding: 70px 0;
+  }
+
+  .portfolio__title {
+    padding-bottom: 40px;
+    font-size: 14px;
+  }
+
+  .portfolio__link {
+    font-size: 18px;
+    line-height: 28px;
+  }
+
+  .portfolio__list-item::after {
+    width: 18px;
+    height: 28px;
+  }
 }

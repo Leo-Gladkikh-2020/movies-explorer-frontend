@@ -71,7 +71,6 @@
 }
 
 .profile__btn-logout {
-  font-weight: 500;
   font-size: 13px;
   line-height: 16px;
   font-weight: 500;
@@ -85,4 +84,38 @@
 
 .profile__btn-logout:hover {
   opacity: .6;
+}
+
+@media screen and (max-width: 1023px) {
+  .profile {
+    padding: 236px 0 269px;
+  }
+
+  .profile__form {
+    margin-top: 96px;
+  }
+
+  .profile__form_edit-btn {
+    padding-top: 210px;
+  }
+}
+
+@media screen and (max-width: 767px) {
+  .profile {
+    padding: 70px 10px 40px;
+  }
+
+  .profile__form {
+    max-width: 260px;
+    margin-top: 80px;
+  }
+
+  .profile__form_edit-btn {
+    padding-top: 379px;
+  }
+
+  .profile__btn-logout {
+    font-size: 12px;
+    line-height: 15px;
+  }
 }

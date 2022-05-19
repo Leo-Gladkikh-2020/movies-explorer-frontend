@@ -34,3 +34,34 @@
 .movies-card-list__more-btn:hover {
   opacity: .8;
 }
+
+@media screen and (max-width: 1023px) {
+  .movies-card-list {
+    width: calc(100% - 60px);
+  }
+
+  .movies-card-list__list {
+    grid-template-columns: repeat(2, auto);
+    gap: 30px;
+  }
+
+  .movies-card-list__more-btn {
+    min-width: 100%;
+  }
+}
+
+@media screen and (max-width: 767px) {
+  .movies-card-list {
+    width: calc(100% - 20px);
+    padding-top: 40px;
+  }
+
+  .movies-card-list__list {
+    grid-template-columns: repeat(auto-fit, 300px);
+    justify-content: center;
+  }
+
+  .movies-card-list__more-btn {
+    min-width: 100%;
+  }
+}

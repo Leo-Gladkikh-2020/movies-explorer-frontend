@@ -27,6 +27,7 @@ export default function Header() {
             <div className="header__navigation-profile">
               <Link to="/profile" className="header__profile hover-link">Аккаунт<span className="header__profile-icon"></span></Link>
             </div>
+            <Link to="/" className="header__menu-icon" />
           </div>
         </header>
       </Route>

@@ -1,27 +1,40 @@
 .promo {
   min-height: 524px;
-  background-color: #073042;
-  box-sizing: border-box;
   display: flex;
   justify-content: center;
   align-items: center;
-  position: relative;
+  background-color: #073042;
+  background-image: url('../../images/promo-image.svg');
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 320px;
 }
 
 .promo__title {
-  margin: 0 auto;
+  margin: 0;
   max-width: 730px;
   font-size: 50px;
   line-height: 58px;
   font-weight: normal;
-  color: #fff;
   letter-spacing: -0.04em;
   text-align: center;
 }
 
-.promo__image {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
+@media screen and (max-width: 1023px) {
+  .promo {
+    min-height: 768px;
+  }
+}
+
+@media screen and (max-width: 767px) {
+  .promo {
+    min-height: 570px;
+    background-size: 248px;
+  }
+
+  .promo__title {
+    max-width: 300px;
+    font-size: 31px;
+    line-height: 39px;
+  }
 }
