@@ -23,6 +23,10 @@
   box-sizing: border-box;
 }
 
+.search-form__form:focus-within {
+  border: 1px solid rgba(66, 133, 244, .4);
+}
+
 .search-form__input {
   width: 100%;
   padding-left: 22px;
