@@ -1,0 +1,120 @@
+.navigation {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-grow: 1;
+}
+
+.navigation__authorization {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  flex-grow: 1;
+}
+
+.navigation__registration {
+  padding-right: 30px;
+  font-size: 12px;
+  line-height: 16px;
+  font-weight: 500;
+  color: #fff;
+  text-decoration: none;
+}
+
+.navigation__login {
+  padding: 8px 20px;
+  background-color: #3ddc84;
+  font-size: 12px;
+  line-height: 16px;
+  font-weight: 500;
+  color: #000;
+  text-decoration: none;
+  border-radius: 3px;
+}
+
+.navigation__movies {
+  padding: 0 0 0 44px;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  flex-grow: 1;
+}
+
+.navigation__movies-link {
+  font-size: 13px;
+  line-height: 18px;
+  font-weight: 500;
+  color: #fff;
+  text-align: right;
+  text-decoration: none;
+}
+
+.navigation__saved-movies-link {
+  padding-left: 16px;
+  font-size: 13px;
+  line-height: 18px;
+  color: #fff;
+  text-align: right;
+  text-decoration: none;
+}
+
+.navigation__saved-movies-link:first-child {
+  padding-left: 0;
+}
+
+.navigation__profile-link {
+  font-size: 13px;
+  line-height: 12px;
+  font-weight: 500;
+  color: #fff;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+}
+
+.navigation__profile-icon {
+  display: block;
+  margin-left: 7px;
+  width: 26px;
+  height: 26px;
+  background-color: #313131;
+  background-image: url('../../images/profile-icon.svg');
+  background-repeat: no-repeat;
+  background-position: center;
+  border-radius: 50px;
+}
+
+.hover-link {
+  cursor: pointer;
+  transition: opacity 0.3s ease;
+}
+
+.hover-link:hover {
+  opacity: .8;
+}
+
+.navigation__menu-icon {
+  width: 44px;
+  height: 44px;
+  background-image: url('../../images/menu-icon.svg');
+  background-repeat: no-repeat;
+  background-position: center;
+  background-color: transparent;
+  border: none;
+  display: none;
+}
+
+.navigation__menu-icon:hover {
+  cursor: pointer;
+  opacity: .8;
+}
+
+@media screen and (max-width: 768px) {
+  .navigation-desctop {
+    display: none;
+  }
+
+  .navigation__menu-icon {
+    display: block;
+  }
+}

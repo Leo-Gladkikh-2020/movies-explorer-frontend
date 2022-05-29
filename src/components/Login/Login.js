@@ -1,11 +1,28 @@
-import React from 'react';
+import { React, useState } from 'react';
 import { Link } from 'react-router-dom';
 import './Login.css';
 
-export default function Login() {
+export default function Login(props) {
+
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+
+  function handleChangeEmail(event) {
+    setEmail(event.target.value);
+  }
+
+  function handleChangePassword(event) {
+    setPassword(event.target.value);
+  }
+
+  function handleSubmit(event) {
+    event.preventDefault();
+    props.handleLogin(email, password);
+  }
+
   return (
     <section className="login">
-      <form className="login__form" name="login">
+      <form className="login__form" name="login" onSubmit={handleSubmit}>
         <Link to="/" className="login__form_logo" />
         <h1 className="login__form_title">Рады видеть!</h1>
 
@@ -20,8 +37,10 @@ export default function Login() {
             minLength="1"
             maxLength="30"
             required
+            value={email || ''}
+            onChange={handleChangeEmail}
           />
-          <span className="login__form_error" id="email-error">Неверный формат email</span>
+          <span className="login__form_error" id="email-error"></span>
         </label>
 
         <label className="login__form_label">
@@ -35,6 +54,8 @@ export default function Login() {
             minLength="5"
             maxLength="15"
             required
+            value={password || ''}
+            onChange={handleChangePassword}
           />
           <span className="login__form_error" id="password-error"></span>
         </label>

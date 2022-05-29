@@ -1,7 +1,10 @@
 import React from 'react';
+import { CurrentUserContext } from '../../contexts/CurrentUserContext';
 import './MoviesCard.css';
 
 export default function MoviesCard({ movie }) {
+  const currentUser = React.useContext(CurrentUserContext);
+
   return (
     <li className="movie-card">
       <img className="movie-card__image" src={movie.poster} alt={movie.title} />
