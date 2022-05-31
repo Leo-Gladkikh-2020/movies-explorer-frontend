@@ -10,7 +10,7 @@ export default function Header({ loggedIn }) {
         <header className="header header__color">
           <div className="header__container">
             <Link to="/" className="header__logo" />
-            <Navigation loggedIn={loggedIn} headerColor={true} />
+            <Navigation loggedIn={loggedIn} />
           </div>
         </header>
       </Route>
@@ -18,7 +18,7 @@ export default function Header({ loggedIn }) {
         <header className="header">
           <div className="header__container">
             <Link to="/" className="header__logo" />
-            <Navigation loggedIn={loggedIn} headerColor={false} />
+            <Navigation loggedIn={loggedIn} />
           </div>
         </header>
       </Route>
