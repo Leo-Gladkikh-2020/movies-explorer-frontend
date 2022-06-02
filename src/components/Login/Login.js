@@ -1,23 +1,21 @@
-import { React, useState } from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
+import { useFormValidation } from '../../hooks/useFormValidation';
 import './Login.css';
 
-export default function Login(props) {
+export default function Login({ onLogin }) {
+  const { resetForm, values, handleChange, errors, isValid } = useFormValidation();
 
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-
-  function handleChangeEmail(event) {
-    setEmail(event.target.value);
-  }
-
-  function handleChangePassword(event) {
-    setPassword(event.target.value);
-  }
+  React.useEffect(() => {
+    resetForm();
+  }, [resetForm]);
 
   function handleSubmit(event) {
     event.preventDefault();
-    props.handleLogin(email, password);
+    onLogin({
+      email: values.email,
+      password: values.password
+    });
   }
 
   return (
@@ -37,10 +35,12 @@ export default function Login(props) {
             minLength="1"
             maxLength="30"
             required
-            value={email || ''}
-            onChange={handleChangeEmail}
+            value={values.email || ''}
+            onChange={handleChange}
           />
-          <span className="login__form_error" id="email-error"></span>
+          <span id="email-error" className={`login__form_error ${errors.email && 'login__form_error_visible'}`}>
+            {errors.email}
+          </span>
         </label>
 
         <label className="login__form_label">
@@ -54,13 +54,17 @@ export default function Login(props) {
             minLength="5"
             maxLength="15"
             required
-            value={password || ''}
-            onChange={handleChangePassword}
+            value={values.password || ''}
+            onChange={handleChange}
           />
-          <span className="login__form_error" id="password-error"></span>
+          <span id="password-error" className={`login__form_error ${errors.password && 'login__form_error_visible'}`}>
+            {errors.password}
+          </span>
         </label>
 
-        <button className="login__form_btn" type="submit">Войти</button>
+        <button className={`login__form_btn ${!isValid && 'login__form_btn_disabled'}`} disabled={!isValid} type="submit">
+          Войти
+        </button>
         <p className="login__form_signup">Ещё не зарегистрированы?
           <Link to="signup" className="login__form_link"> Регистрация</Link>
         </p>
