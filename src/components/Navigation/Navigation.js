@@ -17,7 +17,7 @@ export default function Navigation({ loggedIn }) {
     <nav className="navigation">
       {!loggedIn ? (
         <div className="navigation__authorization">
-          <Link className="navigation__registration hover-link">Регистрация</Link>
+          <Link className="navigation__registration hover-link" to="/signup">Регистрация</Link>
           <Link className="navigation__login hover-link" to="/signin">Войти</Link>
         </div>
       ) : (

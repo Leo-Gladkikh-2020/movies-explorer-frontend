@@ -3,31 +3,8 @@ class MainApi {
     this._baseUrl = baseUrl;
   }
 
-  register({ name, email, password }) {
-    return fetch(`${this._baseUrl}/signup`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ name, email, password }),
-    })
-      .then(this._checkStatus)
-  }
-
-  authorize({ email, password }) {
-    return fetch(`${this._baseUrl}/signin`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ email, password }),
-    })
-      .then(this._checkStatus)
-  }
-
-  getUserInfo(token) {
+  getUserInfo() {
     return fetch(`${this._baseUrl}/users/me`, {
-      method: 'GET',
       headers: {
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${localStorage.getItem('token')}`
@@ -36,7 +13,7 @@ class MainApi {
       .then(this._checkStatus)
   }
 
-  changeUserInfo({ token, data }) {
+  changeUserInfo(data) {
     return fetch(`${this._baseUrl}/users/me`, {
       method: 'PATCH',
       headers: {
@@ -58,7 +35,7 @@ class MainApi {
 }
 
 const mainApi = new MainApi({
-  baseUrl: 'http://localhost:3000',
+  baseUrl: 'https://api.leonid-movies.nomoredomains.work',
 });
 
 export default mainApi;

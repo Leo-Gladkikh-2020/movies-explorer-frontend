@@ -1,4 +1,4 @@
-import { React, useState } from 'react';
+import { React, useState, useEffect } from 'react';
 import { Route, Switch, useHistory } from 'react-router-dom';
 import Header from '../Header/Header';
 import Main from '../Main/Main';
@@ -12,6 +12,7 @@ import Register from '../Register/Register';
 import NotFound from '../NotFound/NotFound';
 import ProtectedRoute from '../ProtectedRoute/ProtectedRoute';
 import mainApi from '../../utils/MainApi';
+import * as auth from '../../utils/auth';
 import { CurrentUserContext } from '../../contexts/CurrentUserContext';
 import './App.css';
 
@@ -20,23 +21,69 @@ export default function App() {
   const [loggedIn, setLoggedIn] = useState(false);
   const history = useHistory();
 
-  function handleLogin(data) {
-    mainApi.authorize(data)
-      .then((res) => {
-        setLoggedIn(true);
-        localStorage.setItem('token', res.token);
-        setCurrentUser({ email: data.email });
-        history.push('/movies');
+  const [isLoading, setIsLoading] = useState(false);
+
+  useEffect(() => {
+    if (loggedIn) {
+      mainApi.getUserInfo()
+        .then(userData => {
+          setCurrentUser(userData);
+        })
+        .catch(err => console.log(err))
+    }
+  }, [loggedIn]);
+
+  function handleUpdateUser(data) {
+    setIsLoading(true);
+    mainApi.changeUserInfo(data)
+      .then(data => {
+        setCurrentUser(data);
+      })
+      .catch(err => console.log(err))
+      .finally(() => {
+        setIsLoading(false);
+      })
+  }
+
+  function handleLogin(email, password) {
+    auth.authorize(email, password)
+      .then(data => {
+        if (data.token) {
+          setLoggedIn(true);
+          localStorage.setItem('token', data.token);
+          history.push('/movies');
+        }
       })
       .catch(err => console.log(err))
   }
 
   function handleRegister(data) {
-    mainApi.register(data)
+    auth.register(data)
       .then(() => {
         handleLogin({ email: data.email, password: data.password });
+        history.push('/movies');
       })
       .catch(err => console.log(err))
+  }
+
+  useEffect(() => {
+    if (localStorage.getItem('token')) {
+      const token = localStorage.getItem('token');
+      auth.checkToken(token)
+        .then(res => {
+          if (res) {
+            setLoggedIn(true);
+          }
+        })
+        .catch(err => console.log(err))
+    }
+  }, []);
+
+  function signOut() {
+    localStorage.removeItem('token');
+    setLoggedIn(false);
+    setCurrentUser({});
+    history.push('/');
   }
 
   return (
@@ -60,21 +107,23 @@ export default function App() {
             loggedIn={loggedIn}
             component={SavedMovies}
           />
-          <ProtectedRoute
-            path="/profile"
-            loggedIn={loggedIn}
-            component={Profile}
-          />
+          <ProtectedRoute path="/profile" loggedIn={loggedIn} >
+            <Profile
+              signOut={signOut}
+              onEditProfile={handleUpdateUser}
+            />
+          </ProtectedRoute>
           <Route path="/signin">
             <Main>
-              <Login handleLogin={handleLogin} />
+              <Login onLogin={handleLogin} />
             </Main>
           </Route>
           <Route path="/signup">
             <Main>
-              <Register handleRegister={handleRegister} />
+              <Register onRegister={handleRegister} />
             </Main>
           </Route>
+
           <Route path="*">
             <Main>
               <NotFound />
