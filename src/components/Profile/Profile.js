@@ -4,24 +4,20 @@ import { CurrentUserContext } from '../../contexts/CurrentUserContext';
 import { useFormValidation } from '../../hooks/useFormValidation';
 import './Profile.css';
 
-export default function Profile({ onUpdateProfile, onSignOut }) {
+export default function Profile({ onUpdateUser, onSignOut }) {
   const currentUser = React.useContext(CurrentUserContext);
-  const { resetForm, values, setValues, handleChange, errors, isValid } = useFormValidation();
+  const { values, errors, handleChange, isValid, resetForm } = useFormValidation();
   const [disabled, setDisabled] = React.useState(true);
 
   React.useEffect(() => {
     if (currentUser) {
       resetForm();
-      setValues({
-        name: currentUser.name,
-        email: currentUser.email
-      });
     }
-  }, [resetForm, currentUser, setValues]);
+  }, [resetForm, currentUser]);
 
   function handleSubmit(event) {
     event.preventDefault();
-    onUpdateProfile({
+    onUpdateUser({
       name: values.name,
       email: values.email
     });
@@ -44,18 +40,17 @@ export default function Profile({ onUpdateProfile, onSignOut }) {
             type="text"
             id="name"
             name="name"
-            placeholder="Имя"
             minLength="1"
             maxLength="30"
             required
             value={values.name || ''}
-            disabled={disabled ? true : false}
             onChange={handleChange}
+            disabled={disabled ? true : false}
           />
-          <span id="name-error" className={`profile__error ${errors.name && 'profile__error_visible'}`}>
-            {errors.name}
-          </span>
         </label>
+        <span id="name-error" className={`profile__error ${errors.name && 'profile__error_visible'}`}>
+          {errors.name}
+        </span>
 
         <label className="profile__label">
           <span className="profile__label-text">E-mail</span>
@@ -64,18 +59,17 @@ export default function Profile({ onUpdateProfile, onSignOut }) {
             type="email"
             id="email"
             name="email"
-            placeholder="E-mail"
             minLength="1"
             maxLength="30"
             required
             value={values.email || ''}
-            disabled={disabled ? true : false}
             onChange={handleChange}
+            disabled={disabled ? true : false}
           />
-          <span id="email-error" className={`profile__error ${errors.email && 'profile__error_visible'}`}>
-            {errors.email}
-          </span>
         </label>
+        <span id="email-error" className={`profile__error ${errors.email && 'profile__error_visible'}`}>
+          {errors.email}
+        </span>
 
         {
           disabled ?
@@ -83,7 +77,6 @@ export default function Profile({ onUpdateProfile, onSignOut }) {
             :
             <button className="profile__form_edit-btn" disabled={!isValid} onClick={handleSubmit}>Сохранить</button>
         }
-
       </form>
       <Link className="profile__btn-logout" to="/" onClick={onSignOut}>Выйти из аккаунта</Link>
     </section >

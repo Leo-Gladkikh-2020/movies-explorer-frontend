@@ -1,5 +1,5 @@
 import { React, useState, useEffect } from 'react';
-import { Route, Switch, useHistory } from 'react-router-dom';
+import { Route, Switch, useHistory, Redirect } from 'react-router-dom';
 import Header from '../Header/Header';
 import Main from '../Main/Main';
 import Footer from '../Footer/Footer';
@@ -20,7 +20,6 @@ export default function App() {
   const [currentUser, setCurrentUser] = useState({});
   const [loggedIn, setLoggedIn] = useState(false);
   const history = useHistory();
-
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
@@ -89,35 +88,45 @@ export default function App() {
   return (
     <CurrentUserContext.Provider value={currentUser}>
       <div className="page">
+        <Header loggedIn={loggedIn} />
+
         <Switch>
+
           <Route exact path="/">
-            <Header path="/" loggedIn={loggedIn} />
             <Main>
               <LandingPage />
             </Main>
-            <Footer />
           </Route>
-          <ProtectedRoute
-            path="/movies"
-            loggedIn={loggedIn}
-            component={Movies}
-          />
-          <ProtectedRoute
-            path="/saved-movies"
-            loggedIn={loggedIn}
-            component={SavedMovies}
-          />
-          <ProtectedRoute path="/profile" loggedIn={loggedIn} >
-            <Profile
-              signOut={signOut}
-              onEditProfile={handleUpdateUser}
+
+          <Route path="/movies">
+            <ProtectedRoute
+              loggedIn={loggedIn}
+              component={Movies}
             />
-          </ProtectedRoute>
+          </Route>
+
+          <Route path="/saved-movies">
+            <ProtectedRoute
+              loggedIn={loggedIn}
+              component={SavedMovies}
+            />
+          </Route>
+
+          <Route path="/profile">
+            <ProtectedRoute
+              loggedIn={loggedIn}
+              component={Profile}
+              onUpdateUser={handleUpdateUser}
+              onSignOut={signOut}
+            />
+          </Route>
+
           <Route path="/signin">
             <Main>
               <Login onLogin={handleLogin} />
             </Main>
           </Route>
+
           <Route path="/signup">
             <Main>
               <Register onRegister={handleRegister} />
@@ -129,7 +138,10 @@ export default function App() {
               <NotFound />
             </Main>
           </Route>
+
         </Switch>
+
+        <Footer />
       </div>
     </CurrentUserContext.Provider>
   );
