@@ -1,31 +1,15 @@
 import React from 'react';
 import SearchForm from '../SearchForm/SearchForm';
 import MoviesCardList from '../MoviesCardList/MoviesCardList';
+// import Preloader from '../Preloader/Preloader';
 import './Movies.css';
 
-export default function Movies() {
-
-  const movies = [
-    {
-      _id: 1,
-      poster: 'https://a-a-ah-ru.s3.amazonaws.com/uploads/items/94462/123032/large_57fea587ab572368559604.jpg',
-      title: 'Бег это свобода',
-      duration: '1ч 44м',
-      isLiked: true,
-    },
-    {
-      _id: 6,
-      poster: 'https://a-a-ah-ru.s3.amazonaws.com/uploads/items/94462/123032/large_57fea587ab572368559604.jpg',
-      title: 'Бег это свобода',
-      duration: '1ч 44м',
-      isLiked: false,
-    },
-  ]
+export default function Movies(props) {
 
   return (
     <section className="movies">
       <SearchForm />
-      <MoviesCardList movies={movies} />
+      <MoviesCardList movies={props.movies} />
       <button className="movies__more-btn">Ещё</button>
     </section>
   )

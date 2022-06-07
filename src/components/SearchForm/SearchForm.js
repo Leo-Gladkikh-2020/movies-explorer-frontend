@@ -1,33 +1,39 @@
 import React from 'react';
+import { useLocation } from 'react-router-dom';
 import FilterCheckbox from '../FilterCheckbox/FilterCheckbox';
 import { useFormValidation } from '../../hooks/useFormValidation';
+
 import './SearchForm.css';
 
-export default function SearchForm({ onSubmitInput, short, handleShort }) {
-  const { values, handleChange } = useFormValidation();
+export default function SearchForm(props) {
+  const { errors, values, handleChange } = useFormValidation();
 
   return (
     <section className="search-form">
-      <form className="search-form__container" onSubmit={onSubmitInput}>
+      <form className="search-form__container" onSubmit={props.onSubmitInput}>
         <fieldset className="search-form__form">
           <input
             className="search-form__input"
-            type="search"
+            type="text"
             id="movie"
             name="movie"
             placeholder="Фильм"
-            minLength="3"
             maxLength="100"
             required
             value={values.movie || ''}
             onChange={handleChange}
           />
-          <span className="search-form__error" id="movie-error"></span>
+          <span id="movie-error" className={`search-form__error ${errors.movie && 'search-form__error_visible'}`}>
+            Нужно ввести ключевое слово
+          </span>
           <button className="search-form__btn" type="submit"></button>
         </fieldset>
         <fieldset className="search-form__checkbox">
           <span className="search-form__span">Короткометражки</span>
-          <FilterCheckbox onShort={short} handleShort={handleShort} />
+          <FilterCheckbox
+            short={props.short}
+            handleShort={props.handleShort}
+          />
         </fieldset>
       </form>
     </section>

@@ -7,7 +7,7 @@ export default function ProtectedRoute({ component: Component, ...props }) {
   return (
     <Route>
       {
-        () => token ? <Component {...props} /> : <Redirect to="/signin" />
+        () => token ? <Component {...props} /> : <Redirect to="/" />
       }
     </Route>
   );

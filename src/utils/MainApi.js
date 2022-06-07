@@ -3,10 +3,9 @@ class MainApi {
     this._baseUrl = baseUrl;
   }
 
-  // User
-
   getUserInfo() {
     return fetch(`${this._baseUrl}/users/me`, {
+      method: 'GET',
       headers: {
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${localStorage.getItem('token')}`
@@ -22,15 +21,17 @@ class MainApi {
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${localStorage.getItem('token')}`
       },
-      body: JSON.stringify({ name: data.name, email: data.email })
+      body: JSON.stringify({
+        name: data.name,
+        email: data.email
+      })
     })
       .then(this._checkStatus)
   }
 
-  // Movies
-
   getMovies() {
     return fetch(`${this._baseUrl}/movies`, {
+      method: 'GET',
       headers: {
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${localStorage.getItem('token')}`
@@ -39,19 +40,7 @@ class MainApi {
       .then(this._checkStatus)
   }
 
-  createMovie({
-    movieId,
-    country,
-    director,
-    duration,
-    year,
-    description,
-    image,
-    trailerLink,
-    nameRU,
-    nameEN,
-    thumbnail,
-  }) {
+  addMovie(data) {
     return fetch(`${this._baseUrl}/movies`, {
       method: 'POST',
       headers: {
@@ -59,17 +48,17 @@ class MainApi {
         'Authorization': `Bearer ${localStorage.getItem('token')}`
       },
       body: JSON.stringify({
-        movieId,
-        country,
-        director,
-        duration,
-        year,
-        description,
-        image,
-        trailerLink,
-        nameRU,
-        nameEN,
-        thumbnail,
+        movieId: data.id,
+        country: data.country,
+        director: data.director,
+        duration: data.duration,
+        year: data.year,
+        description: data.description,
+        image: `https://api.nomoreparties.co${data.image.url}`,
+        trailerLink: data.trailerLink,
+        nameRU: data.nameRU,
+        nameEN: data.nameEN,
+        thumbnail: `https://api.nomoreparties.co${data.image.formats.thumbnail.url}`
       })
     })
       .then(this._checkStatus);

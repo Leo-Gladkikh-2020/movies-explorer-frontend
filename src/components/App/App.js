@@ -12,7 +12,6 @@ import Register from '../Register/Register';
 import NotFound from '../NotFound/NotFound';
 import ProtectedRoute from '../ProtectedRoute/ProtectedRoute';
 import mainApi from '../../utils/MainApi';
-import getMovies from '../../utils/MoviesApi';
 import * as auth from '../../utils/auth';
 import { CurrentUserContext } from '../../contexts/CurrentUserContext';
 import './App.css';
@@ -65,7 +64,10 @@ export default function App() {
   function handleRegister(data) {
     auth.register(data)
       .then(() => {
-        handleLogin({ email: data.email, password: data.password });
+        handleLogin({
+          email: data.email,
+          password: data.password
+        });
         history.push('/movies');
       })
       .catch(err => console.log(err))
@@ -105,23 +107,6 @@ export default function App() {
     return [...movies].filter(movie => (movie.nameRU.toLowerCase().includes(name.toLowerCase())));
   }
 
-  function handleGetMovies(name) {
-    setIsLoading(true);
-    setIsError(false);
-    getMovies()
-      .then(movies => {
-        const findMovies = findMovie(movies, name);
-        setMovies(findMovies);
-        findMovies.length === 0 && setIsError(true);
-        localStorage.setItem('movies', JSON.stringify(findMovies));
-        localStorage.setItem('input', name);
-      })
-      .catch(err => console.log(err))
-      .finally(() => {
-        setIsLoading(false);
-      })
-  }
-
   useEffect(() => {
     if (loggedIn) {
       mainApi.getMovies()
@@ -133,26 +118,6 @@ export default function App() {
         .catch(err => console.log(err))
     }
   }, [currentUser._id, loggedIn]);
-
-  function handleSaveMovie(movie) {
-    mainApi.createMovie({
-      movieId: movie.id,
-      country: movie.country,
-      director: movie.director,
-      duration: movie.duration,
-      year: movie.year,
-      description: movie.description,
-      image: `https://api.nomoreparties.co${movie.image.url}`,
-      trailerLink: movie.trailerLink,
-      nameRU: movie.nameRU,
-      nameEN: movie.nameEN,
-      thumbnail: `https://api.nomoreparties.co${movie.image.formats.thumbnail.url}`
-    })
-      .then(movie => {
-        setSavedMovies([...savedMovies, movie]);
-      })
-      .catch(err => console.log(err))
-  }
 
   function handleDeleteMovie(deletedMovie) {
     mainApi.deleteMovie(deletedMovie._id)
@@ -179,10 +144,8 @@ export default function App() {
             <ProtectedRoute
               loggedIn={loggedIn}
               component={Movies}
-              onSaveMovie={handleSaveMovie}
-              onDeleteMovie={handleDeleteMovie}
+              DeleteMovie={handleDeleteMovie}
               isLoading={isLoading}
-              onGetMovies={handleGetMovies}
               shortOn={shortOn}
               setShortOn={setShortOn}
               isError={isError}
@@ -198,7 +161,7 @@ export default function App() {
               loggedIn={loggedIn}
               component={SavedMovies}
               isLoading={isLoading}
-              ondeleteMovie={handleDeleteMovie}
+              deleteMovie={handleDeleteMovie}
               shortOn={shortOn}
               setShortOn={setShortOn}
               searchInput={searchInput}
