@@ -132,7 +132,7 @@ export default function App() {
       .then(() => {
         setsavedMoviesUser((movies) => movies.filter((m) => m._id !== movie._id));
       })
-      .catch(err => console.log(err))
+      .catch(err => console.log('не удаляется фильм'))
   }
 
   return (
