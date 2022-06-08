@@ -4,7 +4,7 @@ import { CurrentUserContext } from '../../contexts/CurrentUserContext';
 import { useFormValidation } from '../../hooks/useFormValidation';
 import './Profile.css';
 
-export default function Profile({ onUpdateUser, onSignOut }) {
+export default function Profile({ onProfileEdit, onSignOut }) {
   const currentUser = React.useContext(CurrentUserContext);
   const { values, errors, handleChange, isValid, resetForm } = useFormValidation();
   const [disabled, setDisabled] = React.useState(true);
@@ -17,7 +17,7 @@ export default function Profile({ onUpdateUser, onSignOut }) {
 
   function handleSubmit(event) {
     event.preventDefault();
-    onUpdateUser({
+    onProfileEdit({
       name: values.name,
       email: values.email
     });

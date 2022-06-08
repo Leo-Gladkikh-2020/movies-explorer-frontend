@@ -29,47 +29,47 @@ class MainApi {
       .then(this._checkStatus)
   }
 
-  getMovies() {
+  getSavedMovies(token) {
     return fetch(`${this._baseUrl}/movies`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${localStorage.getItem('token')}`
+        'Authorization': `Bearer ${token}`
       }
     })
       .then(this._checkStatus)
   }
 
-  addMovie(data) {
+  saveMovie({ movie, token }) {
     return fetch(`${this._baseUrl}/movies`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${localStorage.getItem('token')}`
+        'Authorization': `Bearer ${token}`
       },
       body: JSON.stringify({
-        movieId: data.id,
-        country: data.country,
-        director: data.director,
-        duration: data.duration,
-        year: data.year,
-        description: data.description,
-        image: `https://api.nomoreparties.co${data.image.url}`,
-        trailerLink: data.trailerLink,
-        nameRU: data.nameRU,
-        nameEN: data.nameEN,
-        thumbnail: `https://api.nomoreparties.co${data.image.formats.thumbnail.url}`
+        movieId: movie.id,
+        country: movie.country,
+        director: movie.director,
+        duration: movie.duration,
+        year: movie.year,
+        description: movie.description,
+        image: `https://api.nomoreparties.co${movie.image.url}`,
+        trailerLink: movie.trailerLink,
+        nameRU: movie.nameRU,
+        nameEN: movie.nameEN,
+        thumbnail: `https://api.nomoreparties.co${movie.image.formats.thumbnail.url}`
       })
     })
-      .then(this._checkStatus);
+      .then(this._checkStatus)
   }
 
-  deleteMovie(movieId) {
-    return fetch(`${this._baseUrl}/movies/${movieId}`, {
+  deleteMovie({ movie, token }) {
+    return fetch(`${this._baseUrl}/movies/${movie._id}`, {
       method: 'DELETE',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${localStorage.getItem('token')}`
+        'Authorization': `Bearer ${token}`
       }
     })
       .then(this._checkStatus)

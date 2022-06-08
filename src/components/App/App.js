@@ -1,5 +1,5 @@
-import { React, useState, useEffect } from 'react';
-import { Route, Switch, useHistory } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { Route, Switch, useHistory, Redirect } from 'react-router-dom';
 import Header from '../Header/Header';
 import Main from '../Main/Main';
 import Footer from '../Footer/Footer';
@@ -19,48 +19,10 @@ import './App.css';
 export default function App() {
   const [loggedIn, setLoggedIn] = useState(false);
   const [currentUser, setCurrentUser] = useState({});
-  const [isLoading, setIsLoading] = useState(false);
   const history = useHistory();
-  const [movies, setMovies] = useState([]);
-  const [savedMovies, setSavedMovies] = useState([]);
-  const [isError, setIsError] = useState(false);
-  const [shortOn, setShortOn] = useState(false);
-  const [searchInput, setSearchInput] = useState(localStorage.getItem('input') || '');
+  const [savedMoviesUser, setsavedMoviesUser] = useState([]);
 
-  useEffect(() => {
-    if (loggedIn) {
-      mainApi.getUserInfo()
-        .then(userData => {
-          setCurrentUser(userData);
-        })
-        .catch(err => console.log(err))
-    }
-  }, [loggedIn]);
-
-  function handleUpdateUser(data) {
-    setIsLoading(true);
-    mainApi.changeUserInfo(data)
-      .then(data => {
-        setCurrentUser(data);
-      })
-      .catch(err => console.log(err))
-      .finally(() => {
-        setIsLoading(false);
-      })
-  }
-
-  function handleLogin(email, password) {
-    auth.authorize(email, password)
-      .then(data => {
-        if (data.token) {
-          setLoggedIn(true);
-          localStorage.setItem('token', data.token);
-          history.push('/movies');
-        }
-      })
-      .catch(err => console.log(err))
-  }
-
+  // регистрация
   function handleRegister(data) {
     auth.register(data)
       .then(() => {
@@ -73,6 +35,20 @@ export default function App() {
       .catch(err => console.log(err))
   }
 
+  // вход
+  function handleLogin(data) {
+    auth.authorize(data)
+      .then(res => {
+        if (res.token) {
+          setLoggedIn(true);
+          localStorage.setItem('token', res.token);
+          history.push('/movies');
+        }
+      })
+      .catch(err => console.log(err))
+  }
+
+  // проверка токена
   useEffect(() => {
     if (localStorage.getItem('token')) {
       const token = localStorage.getItem('token');
@@ -86,43 +62,75 @@ export default function App() {
     }
   }, []);
 
-  function signOut() {
-    localStorage.removeItem('movies');
-    localStorage.removeItem('short');
-    localStorage.removeItem('input');
-    localStorage.removeItem('token');
+  // выход
+  function handleSignOut() {
     setLoggedIn(false);
-    setCurrentUser({});
+    localStorage.removeItem('token');
+    localStorage.removeItem('initialMovies');
     history.push('/');
-    setMovies([]);
-    setSearchInput('');
   }
 
   useEffect(() => {
-    setMovies(JSON.parse(localStorage.getItem('movies')) || movies);
-    setShortOn(JSON.parse(localStorage.getItem('short')) || false)
-  }, [movies]);
-
-  function findMovie(movies, name) {
-    return [...movies].filter(movie => (movie.nameRU.toLowerCase().includes(name.toLowerCase())));
-  }
-
-  useEffect(() => {
-    if (loggedIn) {
-      mainApi.getMovies()
-        .then(savedMovies => {
-          const currentMovies = savedMovies.filter(movie => movie.owner === currentUser._id);
-          localStorage.setItem('savedMovies', JSON.stringify(currentMovies));
-          setSavedMovies(currentMovies)
+    const token = localStorage.getItem('token');
+    if (token) {
+      mainApi.getUserInfo(token)
+        .then(data => {
+          if (data) {
+            setLoggedIn(true);
+          }
         })
         .catch(err => console.log(err))
     }
-  }, [currentUser._id, loggedIn]);
+  }, []);
 
-  function handleDeleteMovie(deletedMovie) {
-    mainApi.deleteMovie(deletedMovie._id)
+  // получаем данные пользователя
+  useEffect(() => {
+    if (loggedIn) {
+      mainApi.getUserInfo()
+        .then(user => {
+          setCurrentUser(user);
+        })
+        .catch(err => console.log(err))
+    }
+  }, [loggedIn]);
+
+  // редактируем профиль
+  function handleProfileEdit(data) {
+    mainApi.changeUserInfo(data)
+      .then(data => {
+        setCurrentUser(data);
+      })
+      .catch(err => console.log(err))
+  }
+
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    if (token) {
+      mainApi.getSavedMovies(token)
+        .then((data) => {
+          setsavedMoviesUser(data.filter((i) => i.owner === currentUser._id));
+        })
+        .catch(err => console.log(err))
+    }
+  }, [currentUser]);
+
+  function handleMovieSave(movie) {
+    const token = localStorage.getItem('token');
+    mainApi.saveMovie({ movie, token })
+      .then((newSavedMovie) => {
+        setsavedMoviesUser((movies) => [
+          newSavedMovie,
+          ...movies
+        ]);
+      })
+      .catch(err => console.log(err))
+  }
+
+  function handleMovieDelete(movie) {
+    const token = localStorage.getItem('token');
+    mainApi.deleteMovie({ movie, token })
       .then(() => {
-        setSavedMovies((movies) => movies.filter((movie) => movie._id !== deletedMovie._id));
+        setsavedMoviesUser((movies) => movies.filter((m) => m._id !== movie._id));
       })
       .catch(err => console.log(err))
   }
@@ -133,7 +141,6 @@ export default function App() {
         <Header loggedIn={loggedIn} />
 
         <Switch>
-
           <Route exact path="/">
             <Main>
               <LandingPage />
@@ -144,15 +151,9 @@ export default function App() {
             <ProtectedRoute
               loggedIn={loggedIn}
               component={Movies}
-              DeleteMovie={handleDeleteMovie}
-              isLoading={isLoading}
-              shortOn={shortOn}
-              setShortOn={setShortOn}
-              isError={isError}
-              searchInput={searchInput}
-              setSearchInput={setSearchInput}
-              savedMovies={savedMovies}
-              movies={movies}
+              savedMoviesUser={savedMoviesUser}
+              onMovieSave={handleMovieSave}
+              onMovieDelete={handleMovieDelete}
             />
           </Route>
 
@@ -160,14 +161,8 @@ export default function App() {
             <ProtectedRoute
               loggedIn={loggedIn}
               component={SavedMovies}
-              isLoading={isLoading}
-              deleteMovie={handleDeleteMovie}
-              shortOn={shortOn}
-              setShortOn={setShortOn}
-              searchInput={searchInput}
-              setSearchInput={setSearchInput}
-              savedMovies={savedMovies}
-              setSavedMovies={setSavedMovies}
+              savedMoviesUser={savedMoviesUser}
+              onMovieDelete={handleMovieDelete}
             />
           </Route>
 
@@ -175,21 +170,23 @@ export default function App() {
             <ProtectedRoute
               loggedIn={loggedIn}
               component={Profile}
-              onUpdateUser={handleUpdateUser}
-              onSignOut={signOut}
+              onProfileEdit={handleProfileEdit}
+              onSignOut={handleSignOut}
             />
           </Route>
 
-          <Route path="/signin">
-            <Main>
-              <Login onLogin={handleLogin} />
-            </Main>
+          <Route path="/signup">
+            {loggedIn
+              ? <Redirect to="/" />
+              : <Main><Register onRegister={handleRegister} /></Main>
+            }
           </Route>
 
-          <Route path="/signup">
-            <Main>
-              <Register onRegister={handleRegister} />
-            </Main>
+          <Route path="/signin">
+            {loggedIn
+              ? <Redirect to="/" />
+              : <Main><Login onLogin={handleLogin} /></Main>
+            }
           </Route>
 
           <Route path="*">
@@ -203,5 +200,5 @@ export default function App() {
         <Footer />
       </div>
     </CurrentUserContext.Provider>
-  );
+  )
 }
