@@ -1,5 +1,6 @@
-export const BASE_URL = process.env.REACT_APP_BASE_URL || 'http://localhost:3000';
+// export const BASE_URL = process.env.REACT_APP_BASE_URL || 'http://localhost:3000';
 // export const BASE_URL = 'https://api.leonid-movies.nomoredomains.work' || 'http://localhost:3000';
+export const BASE_URL = process.env.REACT_APP_BASE_URL = 'https://api.leonid-movies.nomoredomains.work npm run build';
 
 const HEADERS = {
   'Accept': 'application/json',
