@@ -50,7 +50,7 @@ export default function SavedMovies({ savedMoviesUser, onMovieDelete }) {
           />
           : (
             <span className="saved-movies__nothing-found">
-              Ничего не найдено
+              Ничего не найдено. Введите другое ключевое слово.
             </span>
           )
         : <MoviesCardList

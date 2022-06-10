@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { CurrentUserContext } from '../../contexts/CurrentUserContext';
 import { useFormValidation } from '../../hooks/useFormValidation';
@@ -6,14 +6,17 @@ import './Profile.css';
 
 export default function Profile({ onProfileEdit, onSignOut }) {
   const currentUser = React.useContext(CurrentUserContext);
-  const { values, errors, handleChange, isValid, resetForm } = useFormValidation();
-  const [disabled, setDisabled] = React.useState(true);
+  const { values, errors, handleChange, isValid, setValues } = useFormValidation();
+  const [disabled, setDisabled] = useState(true);
 
   React.useEffect(() => {
     if (currentUser) {
-      resetForm();
+      setValues({
+        name: currentUser.name,
+        email: currentUser.email
+      })
     }
-  }, [resetForm, currentUser]);
+  }, [currentUser, setValues])
 
   function handleSubmit(event) {
     event.preventDefault();
@@ -31,7 +34,7 @@ export default function Profile({ onProfileEdit, onSignOut }) {
   return (
     <section className="profile">
       <h1 className="profile__title">Привет, {currentUser.name}!</h1>
-      <form className="profile__form" onSubmit={handleSubmit}>
+      <form className="profile__form" onSubmit={handleSubmit} noValidate>
 
         <label className="profile__label">
           <span className="profile__label-text">Имя</span>
@@ -75,7 +78,7 @@ export default function Profile({ onProfileEdit, onSignOut }) {
           disabled ?
             <button className="profile__form_edit-btn" type="submit" onClick={handleChangeUser}>Редактировать</button>
             :
-            <button className="profile__form_edit-btn" disabled={!isValid} onClick={handleSubmit}>Сохранить</button>
+            <button className="profile__form_edit-btn" type="submit" onClick={handleSubmit} disabled={!isValid}>Сохранить</button>
         }
       </form>
       <Link className="profile__btn-logout" to="/" onClick={onSignOut}>Выйти из аккаунта</Link>

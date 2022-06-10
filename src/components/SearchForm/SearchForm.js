@@ -27,7 +27,7 @@ export default function SearchForm({ onSearch }) {
 
   return (
     <section className="search-form">
-      <form className="search-form__container" onSubmit={handleSubmit}>
+      <form className="search-form__container" onSubmit={handleSubmit} noValidate>
         <fieldset className="search-form__form">
           <input
             className="search-form__input"

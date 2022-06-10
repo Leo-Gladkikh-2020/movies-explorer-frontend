@@ -69,15 +69,15 @@ export default function Movies({
   }, [initialMovies, setSearch, checkboxStatus]);
 
   useEffect(() => {
-    if (currentViewport > 320 && currentViewport <= 480) {
-      setInitialValue(12);
-      setMoreBtnClick(3);
-    } else if (currentViewport > 481 && currentViewport <= 768) {
+    if (currentViewport <= 480) {
+      setInitialValue(5);
+      setMoreBtnClick(1);
+    } else if (currentViewport <= 768) {
       setInitialValue(8);
       setMoreBtnClick(2);
     } else if (currentViewport > 768) {
-      setInitialValue(5);
-      setMoreBtnClick(1);
+      setInitialValue(12);
+      setMoreBtnClick(3);
     }
   }, [currentViewport]);
 
@@ -121,7 +121,7 @@ export default function Movies({
             />
             : (
               <span className="movies__nothing-found">
-                Ничего не найдено
+                Ничего не найдено. Введите другое ключевое слово.
               </span>
             )
           : ("")
