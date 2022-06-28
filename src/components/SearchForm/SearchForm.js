@@ -1,17 +1,16 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { useLocation } from 'react-router-dom';
 import FilterCheckbox from '../FilterCheckbox/FilterCheckbox';
-import { useFormValidation } from '../../hooks/useFormValidation';
 import './SearchForm.css';
 
-
 export default function SearchForm({ onSearch }) {
-  const { errors } = useFormValidation();
-  const [search, setSearch] = React.useState('');
+  const location = useLocation();
+  const [error, setError] = useState('');
+  const [search, setSearch] = useState(location.pathname === '/movies' ? localStorage.getItem('search') || '' : '');
   const [checkboxStatus, setCheckboxStatus] = React.useState(false);
 
   function handleSearchChange(event) {
-    const input = document.getElementById('searchInput');
-    input.setCustomValidity('');
+    setError('');
     setSearch(event.target.value);
   }
 
@@ -22,7 +21,13 @@ export default function SearchForm({ onSearch }) {
 
   function handleSubmit(event) {
     event.preventDefault();
-    onSearch(search, checkboxStatus);
+    if (search === '') {
+      setError('Нужно ввести ключевое слово')
+    } else {
+      onSearch(search, checkboxStatus);
+      setError('');
+    }
+    location.pathname === '/movies' && localStorage.setItem('search', search);
   }
 
   return (
@@ -40,9 +45,7 @@ export default function SearchForm({ onSearch }) {
             value={search || ''}
             onChange={handleSearchChange}
           />
-          <span id="movie-error" className={`search-form__error ${errors.movie && 'search-form__error_visible'}`}>
-            Нужно ввести ключевое слово
-          </span>
+          <span id="movie-error" className='search-form__error search-form__error_visible'>{error}</span>
           <button className="search-form__btn" type="submit"></button>
         </fieldset>
         <fieldset className="search-form__checkbox">

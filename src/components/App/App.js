@@ -22,8 +22,14 @@ export default function App() {
   const history = useHistory();
   const [savedMoviesUser, setsavedMoviesUser] = useState([]);
 
+  const [isSuccessRegister, setIsSuccessRegister] = useState(false);
+  const [errorStatusRegister, setErrorStatusRegister] = useState({});
+  const [isSuccessLogin, setIsSuccessLogin] = React.useState(false);
+  const [errorStatusLogin, setErrorStatusLogin] = React.useState({});
+
   // регистрация
   function handleRegister(data) {
+    setIsSuccessRegister(true);
     auth.register(data)
       .then(() => {
         handleLogin({
@@ -32,11 +38,27 @@ export default function App() {
         });
         history.push('/movies');
       })
-      .catch(err => console.log(err))
+      .catch(err => {
+        if (err.statusCode === 409) {
+          setErrorStatusRegister({
+            message: 'Пользователь с таким e-mail уже существует',
+            type: 'error'
+          });
+        } else {
+          setErrorStatusRegister({
+            message: 'При регистрации произошла ошибка. Проверьте правильность введённых данных',
+            type: 'error'
+          });
+        }
+      })
+      .finally(() => {
+        setIsSuccessRegister(false);
+      })
   }
 
   // вход
   function handleLogin(data) {
+    setIsSuccessLogin(true);
     auth.authorize(data)
       .then(res => {
         if (res.token) {
@@ -45,7 +67,22 @@ export default function App() {
           history.push('/movies');
         }
       })
-      .catch(err => console.log(err))
+      .catch(err => {
+        if (err.statusCode === 401) {
+          setErrorStatusLogin({
+            message: 'Неправильные почта или пароль.',
+            type: 'error'
+          });
+        } else {
+          setErrorStatusLogin({
+            message: 'При авторизации произошла ошибка. Проверьте правильность введённых данных',
+            type: 'error'
+          });
+        }
+      })
+      .finally(() => {
+        setIsSuccessLogin(false);
+      })
   }
 
   // проверка токена
@@ -65,8 +102,8 @@ export default function App() {
   // выход
   function handleSignOut() {
     setLoggedIn(false);
+    localStorage.clear();
     localStorage.removeItem('token');
-    localStorage.removeItem('initialMovies');
     history.push('/');
   }
 
@@ -178,14 +215,22 @@ export default function App() {
           <Route path="/signup">
             {loggedIn
               ? <Redirect to="/" />
-              : <Main><Register onRegister={handleRegister} /></Main>
+              : <Main><Register
+                onRegister={handleRegister}
+                isSuccess={isSuccessRegister}
+                errorStatus={errorStatusRegister}
+              /></Main>
             }
           </Route>
 
           <Route path="/signin">
             {loggedIn
               ? <Redirect to="/" />
-              : <Main><Login onLogin={handleLogin} /></Main>
+              : <Main><Login
+                onLogin={handleLogin}
+                isSuccess={isSuccessLogin}
+                errorStatus={errorStatusLogin}
+              /></Main>
             }
           </Route>
 

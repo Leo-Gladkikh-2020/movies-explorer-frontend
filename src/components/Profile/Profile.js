@@ -1,15 +1,15 @@
-import React, { useState } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { CurrentUserContext } from '../../contexts/CurrentUserContext';
 import { useFormValidation } from '../../hooks/useFormValidation';
 import './Profile.css';
 
 export default function Profile({ onProfileEdit, onSignOut }) {
-  const currentUser = React.useContext(CurrentUserContext);
-  const { values, errors, handleChange, isValid, setValues } = useFormValidation();
-  const [disabled, setDisabled] = useState(true);
+  const currentUser = useContext(CurrentUserContext);
+  const { values, errors, handleChange, isValid, setValues, resetForm } = useFormValidation();
+  const [isActived, setIsActived] = useState(false);
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (currentUser) {
       setValues({
         name: currentUser.name,
@@ -18,8 +18,15 @@ export default function Profile({ onProfileEdit, onSignOut }) {
     }
   }, [currentUser, setValues])
 
+  useEffect(() => {
+    if (currentUser) {
+      resetForm(currentUser, {}, false);
+    }
+  }, [currentUser, resetForm]);
+
   function handleSubmit(event) {
     event.preventDefault();
+    setIsActived(false);
     onProfileEdit({
       name: values.name,
       email: values.email
@@ -28,7 +35,8 @@ export default function Profile({ onProfileEdit, onSignOut }) {
 
   function handleChangeUser(event) {
     event.preventDefault();
-    setDisabled(false);
+    resetForm(currentUser, {}, false);
+    setIsActived(true);
   }
 
   return (
@@ -43,16 +51,17 @@ export default function Profile({ onProfileEdit, onSignOut }) {
             type="text"
             id="name"
             name="name"
-            minLength="1"
+            minLength="3"
             maxLength="30"
             required
             value={values.name || ''}
             onChange={handleChange}
-            disabled={disabled ? true : false}
+            disabled={!isActived}
           />
         </label>
+
         <span id="name-error" className={`profile__error ${errors.name && 'profile__error_visible'}`}>
-          {errors.name}
+          {errors.name ? 'Имя должно содержать от трёх до тридцати символов' : ''}
         </span>
 
         <label className="profile__label">
@@ -62,24 +71,24 @@ export default function Profile({ onProfileEdit, onSignOut }) {
             type="email"
             id="email"
             name="email"
+            pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$"
             minLength="1"
             maxLength="30"
             required
             value={values.email || ''}
             onChange={handleChange}
-            disabled={disabled ? true : false}
+            disabled={!isActived}
           />
         </label>
         <span id="email-error" className={`profile__error ${errors.email && 'profile__error_visible'}`}>
-          {errors.email}
+          {errors.email ? 'Не корректный e-mail адрес' : ''}
         </span>
 
-        {
-          disabled ?
-            <button className="profile__form_edit-btn" type="submit" onClick={handleChangeUser}>Редактировать</button>
-            :
-            <button className="profile__form_edit-btn" type="submit" onClick={handleSubmit} disabled={!isValid}>Сохранить</button>
+        {!isActived
+          ? <button className="profile__form_edit-btn" type="button" onClick={handleChangeUser}>Редактировать</button>
+          : <button className="profile__form_edit-btn" type="submit" disabled={!isValid}>Сохранить</button>
         }
+
       </form>
       <Link className="profile__btn-logout" to="/" onClick={onSignOut}>Выйти из аккаунта</Link>
     </section >

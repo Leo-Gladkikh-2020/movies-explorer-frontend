@@ -3,8 +3,9 @@ import { Link } from 'react-router-dom';
 import { useFormValidation } from '../../hooks/useFormValidation';
 import './Register.css';
 
-export default function Register({ onRegister }) {
+export default function Register({ onRegister, isSuccess, errorStatus: { message, type } }) {
   const { resetForm, values, handleChange, errors, isValid } = useFormValidation();
+  const isDisabled = !isValid || isSuccess;
 
   React.useEffect(() => {
     resetForm();
@@ -33,14 +34,14 @@ export default function Register({ onRegister }) {
             id="name"
             name="name"
             placeholder="Имя"
-            minLength="1"
+            minLength="3"
             maxLength="30"
             required
             value={values.name || ''}
             onChange={handleChange}
           />
           <span id="name-error" className={`register__form_error ${errors.name && 'register__form_error_visible'}`}>
-            {errors.name}
+            {errors.name ? 'Имя должно содержать от трёх до тридцати символов' : ''}
           </span>
         </label>
 
@@ -51,6 +52,7 @@ export default function Register({ onRegister }) {
             type="email"
             id="email"
             name="email"
+            pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$"
             placeholder="E-mail"
             minLength="1"
             maxLength="30"
@@ -59,7 +61,7 @@ export default function Register({ onRegister }) {
             onChange={handleChange}
           />
           <span id="email-error" className={`register__form_error ${errors.email && 'register__form_error_visible'}`}>
-            {errors.email}
+            {errors.email ? 'Не корректный e-mail адрес' : ''}
           </span>
         </label>
 
@@ -71,18 +73,20 @@ export default function Register({ onRegister }) {
             id="password"
             name="password"
             placeholder="Пароль"
-            minLength="5"
-            maxLength="15"
+            minLength="6"
+            maxLength="20"
             required
             value={values.password || ''}
             onChange={handleChange}
           />
           <span id="password-error" className={`register__form_error ${errors.password && 'register__form_error_visible'}`}>
-            {errors.password}
+            {errors.password ? 'Пароль должен содержать от шести до двадцати символов' : ''}
           </span>
         </label>
 
-        <button className={`register__form_btn ${!isValid && 'register__form_btn_disabled'}`} disabled={!isValid} type="submit">
+        <span className={`form__error form__error_type_${type}`}>{message}</span>
+
+        <button className={`register__form_btn ${!isValid && 'register__form_btn_disabled'}`} disabled={isDisabled} type="submit">
           Зарегистрироваться
         </button>
         <p className="register__form_signin">Уже зарегистрированы?

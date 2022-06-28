@@ -3,8 +3,9 @@ import { Link } from 'react-router-dom';
 import { useFormValidation } from '../../hooks/useFormValidation';
 import './Login.css';
 
-export default function Login({ onLogin }) {
+export default function Login({ onLogin, isSuccess, errorStatus: { message, type } }) {
   const { resetForm, values, handleChange, errors, isValid } = useFormValidation();
+  const isDisabled = !isValid || isSuccess;
 
   React.useEffect(() => {
     resetForm();
@@ -31,6 +32,7 @@ export default function Login({ onLogin }) {
             type="email"
             id="email"
             name="email"
+            pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$"
             placeholder="E-mail"
             minLength="1"
             maxLength="30"
@@ -39,7 +41,7 @@ export default function Login({ onLogin }) {
             onChange={handleChange}
           />
           <span id="email-error" className={`login__form_error ${errors.email && 'login__form_error_visible'}`}>
-            {errors.email}
+            {errors.email ? 'Не корректный e-mail адрес' : ''}
           </span>
         </label>
 
@@ -58,11 +60,13 @@ export default function Login({ onLogin }) {
             onChange={handleChange}
           />
           <span id="password-error" className={`login__form_error ${errors.password && 'login__form_error_visible'}`}>
-            {errors.password}
+            {errors.password ? 'Пароль должен содержать от шести до двадцати символов' : ''}
           </span>
         </label>
 
-        <button className={`login__form_btn ${!isValid && 'login__form_btn_disabled'}`} disabled={!isValid} type="submit">
+        <span className={`form__error form__error_type_${type}`}>{message}</span>
+
+        <button className={`login__form_btn ${!isValid && 'login__form_btn_disabled'}`} disabled={isDisabled} type="submit">
           Войти
         </button>
         <p className="login__form_signup">Ещё не зарегистрированы?

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Route, Switch } from 'react-router-dom';
 import './MoviesCard.css';
-import conversionDuration from '../../utils/constants';
+import { conversionDuration } from '../../utils/utils';
 
 export default function MoviesCard({ movie, savedMoviesUser, onMovieSave, onMovieDelete }) {
 

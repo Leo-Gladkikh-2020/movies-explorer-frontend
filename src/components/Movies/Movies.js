@@ -3,6 +3,7 @@ import SearchForm from '../SearchForm/SearchForm';
 import MoviesCardList from '../MoviesCardList/MoviesCardList';
 import Preloader from '../Preloader/Preloader';
 import moviesApi from '../../utils/MoviesApi';
+import { filterMovies } from '../../utils/utils';
 import './Movies.css';
 
 export default function Movies({
@@ -44,20 +45,6 @@ export default function Movies({
     } else {
       setInitialMovies(initialMoviesInLocalStorage);
     }
-  }
-
-  function filterMovies(movies, setSearch, checkboxStatus) {
-    let moviesToFilter = movies;
-    let result;
-
-    if (checkboxStatus) {
-      moviesToFilter = moviesToFilter.filter((movie) => movie.duration <= 40);
-    }
-
-    result = moviesToFilter.filter((movie) => {
-      return movie.nameRU.toLowerCase().indexOf(setSearch.toLowerCase()) !== -1;
-    })
-    return result;
   }
 
   useEffect(() => {
