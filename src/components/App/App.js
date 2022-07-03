@@ -23,9 +23,11 @@ export default function App() {
   const [savedMoviesUser, setsavedMoviesUser] = useState([]);
 
   const [isSuccessRegister, setIsSuccessRegister] = useState(false);
-  const [errorStatusRegister, setErrorStatusRegister] = useState({});
-  const [isSuccessLogin, setIsSuccessLogin] = React.useState(false);
-  const [errorStatusLogin, setErrorStatusLogin] = React.useState({});
+  const [isErrorRegister, setIsErrorRegister] = useState({});
+  const [isSuccessLogin, setIsSuccessLogin] = useState(false);
+  const [isErrorLogin, setIsErrorLogin] = useState({});
+  const [isSuccessProfile, setIsSuccessProfile] = useState(false);
+  const [isErrorProfile, setIsErrorProfile] = useState({});
 
   // регистрация
   function handleRegister(data) {
@@ -39,14 +41,19 @@ export default function App() {
         history.push('/movies');
       })
       .catch(err => {
-        if (err.statusCode === 409) {
-          setErrorStatusRegister({
+        if (err.statusCode === 400) {
+          setIsErrorRegister({
+            message: 'Переданы некорректные данные пользователя',
+            type: 'error'
+          });
+        } else if (err === 409) {
+          setIsErrorRegister({
             message: 'Пользователь с таким e-mail уже существует',
             type: 'error'
           });
         } else {
-          setErrorStatusRegister({
-            message: 'При регистрации произошла ошибка. Проверьте правильность введённых данных',
+          setIsErrorRegister({
+            message: 'При регистрации произошла ошибка',
             type: 'error'
           });
         }
@@ -68,14 +75,19 @@ export default function App() {
         }
       })
       .catch(err => {
-        if (err.statusCode === 401) {
-          setErrorStatusLogin({
-            message: 'Неправильные почта или пароль.',
+        if (err.statusCode === 400) {
+          setIsErrorLogin({
+            message: 'Переданы некорректные данные пользователя',
+            type: 'error'
+          });
+        } else if (err.statusCode === 401) {
+          setIsErrorLogin({
+            message: 'Неправильные почта или пароль',
             type: 'error'
           });
         } else {
-          setErrorStatusLogin({
-            message: 'При авторизации произошла ошибка. Проверьте правильность введённых данных',
+          setIsErrorLogin({
+            message: 'При авторизации произошла ошибка',
             type: 'error'
           });
         }
@@ -83,6 +95,14 @@ export default function App() {
       .finally(() => {
         setIsSuccessLogin(false);
       })
+  }
+
+  // выход
+  function handleSignOut() {
+    setLoggedIn(false);
+    localStorage.clear();
+    localStorage.removeItem('token');
+    history.push('/');
   }
 
   // проверка токена
@@ -98,14 +118,6 @@ export default function App() {
         .catch(err => console.log(err))
     }
   }, []);
-
-  // выход
-  function handleSignOut() {
-    setLoggedIn(false);
-    localStorage.clear();
-    localStorage.removeItem('token');
-    history.push('/');
-  }
 
   useEffect(() => {
     const token = localStorage.getItem('token');
@@ -133,11 +145,37 @@ export default function App() {
 
   // редактируем профиль
   function handleProfileEdit(data) {
+    setIsSuccessProfile(true);
+    setIsErrorProfile({});
     mainApi.changeUserInfo(data)
       .then(data => {
         setCurrentUser(data);
+        setIsErrorProfile({
+          message: 'Профиль успешно обновлён',
+          type: 'success'
+        });
       })
-      .catch(err => console.log(err))
+      .catch(err => {
+        if (err.statusCode === 400) {
+          setIsErrorLogin({
+            message: 'Переданы некорректные данные пользователя',
+            type: 'error'
+          });
+        } else if (err.statusCode === 404) {
+          setIsErrorLogin({
+            message: 'Пользователь с указанным id не найден',
+            type: 'error'
+          });
+        } else {
+          setIsErrorLogin({
+            message: 'При обновлении профиля произошла ошибка',
+            type: 'error'
+          });
+        }
+      })
+      .finally(() => {
+        setIsSuccessProfile(false);
+      })
   }
 
   useEffect(() => {
@@ -209,6 +247,8 @@ export default function App() {
               component={Profile}
               onProfileEdit={handleProfileEdit}
               onSignOut={handleSignOut}
+              isSuccess={isSuccessProfile}
+              errorStatus={isErrorProfile}
             />
           </Route>
 
@@ -218,7 +258,7 @@ export default function App() {
               : <Main><Register
                 onRegister={handleRegister}
                 isSuccess={isSuccessRegister}
-                errorStatus={errorStatusRegister}
+                errorStatus={isErrorRegister}
               /></Main>
             }
           </Route>
@@ -229,7 +269,7 @@ export default function App() {
               : <Main><Login
                 onLogin={handleLogin}
                 isSuccess={isSuccessLogin}
-                errorStatus={errorStatusLogin}
+                errorStatus={isErrorLogin}
               /></Main>
             }
           </Route>

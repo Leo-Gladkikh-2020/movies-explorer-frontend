@@ -4,10 +4,12 @@ import { CurrentUserContext } from '../../contexts/CurrentUserContext';
 import { useFormValidation } from '../../hooks/useFormValidation';
 import './Profile.css';
 
-export default function Profile({ onProfileEdit, onSignOut }) {
+export default function Profile({ onProfileEdit, onSignOut, isSuccess, errorStatus: { message, type } }) {
   const currentUser = useContext(CurrentUserContext);
-  const { values, errors, handleChange, isValid, setValues, resetForm } = useFormValidation();
+  const { values, errors, handleChange, isValid, setValues, resetForm, setIsValid } = useFormValidation();
   const [isActived, setIsActived] = useState(false);
+  const isDisabled = !isValid || isSuccess;
+  const saveBtnClassName = `profile__form_save-btn ${isDisabled && "profile__form_save-btn_disabled"}`;
 
   useEffect(() => {
     if (currentUser) {
@@ -17,6 +19,12 @@ export default function Profile({ onProfileEdit, onSignOut }) {
       })
     }
   }, [currentUser, setValues])
+
+  useEffect(() => {
+    if (currentUser.name === values.name && currentUser.email === values.email) {
+      setIsValid(false);
+    }
+  }, [setIsValid, values, currentUser]);
 
   useEffect(() => {
     if (currentUser) {
@@ -47,10 +55,11 @@ export default function Profile({ onProfileEdit, onSignOut }) {
         <label className="profile__label">
           <span className="profile__label-text">Имя</span>
           <input
-            className="profile__input profile__input_type_name"
+            className="profile__input"
             type="text"
             id="name"
             name="name"
+            placeholder="Имя"
             minLength="3"
             maxLength="30"
             required
@@ -67,11 +76,12 @@ export default function Profile({ onProfileEdit, onSignOut }) {
         <label className="profile__label">
           <span className="profile__label-text">E-mail</span>
           <input
-            className="profile__input profile__input_type_email"
+            className="profile__input"
             type="email"
             id="email"
             name="email"
             pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$"
+            placeholder="E-mail"
             minLength="1"
             maxLength="30"
             required
@@ -80,13 +90,29 @@ export default function Profile({ onProfileEdit, onSignOut }) {
             disabled={!isActived}
           />
         </label>
+
         <span id="email-error" className={`profile__error ${errors.email && 'profile__error_visible'}`}>
           {errors.email ? 'Не корректный e-mail адрес' : ''}
         </span>
 
+        {!isActived && (
+          <span className={`form__success form__success_type_${type}`}>{message}</span>
+        )}
+
         {!isActived
-          ? <button className="profile__form_edit-btn" type="button" onClick={handleChangeUser}>Редактировать</button>
-          : <button className="profile__form_edit-btn" type="submit" disabled={!isValid}>Сохранить</button>
+          ? <button
+            className="profile__form_edit-btn"
+            type="button"
+            onClick={handleChangeUser}>
+            Редактировать
+          </button>
+          : <>
+            <button
+              className={saveBtnClassName}
+              type="submit"
+              disabled={isDisabled}>
+              Сохранить
+            </button></>
         }
 
       </form>
