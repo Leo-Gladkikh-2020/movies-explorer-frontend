@@ -70,6 +70,43 @@
   opacity: .6;
 }
 
+.profile__form_save-btn {
+  padding-top: 220px;
+  font-size: 13px;
+  line-height: 16px;
+  color: #fff;
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+}
+
+.profile__form_save-btn:hover {
+  opacity: .6;
+}
+
+.profile__form_save-btn_disabled {
+  color: #8b8b8b;
+  cursor: auto;
+}
+
+.profile__form_save-btn_disabled:hover {
+  opacity: 1;
+}
+
+.profile__error {
+  padding: 10px 0;
+  font-size: 10px;
+  line-height: 12px;
+  color: #ee3465;
+  opacity: 0;
+  visibility: hidden;
+}
+
+.profile__error_visible {
+  opacity: 1;
+  visibility: visible;
+}
+
 .profile__btn-logout {
   font-size: 13px;
   line-height: 16px;

@@ -10,3 +10,17 @@
   -ms-text-size-adjust: 100%;
   -moz-text-size-adjust: 100%;
 }
+
+.form__error {
+  font-size: 12px;
+  line-height: 15px;
+  text-align: center;
+  color: #ee3465;
+}
+
+.form__success {
+  font-size: 12px;
+  line-height: 15px;
+  text-align: center;
+  color: #3ddc84;
+}

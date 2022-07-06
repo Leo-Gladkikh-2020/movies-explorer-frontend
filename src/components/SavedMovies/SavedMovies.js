@@ -1,38 +1,63 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import SearchForm from '../SearchForm/SearchForm';
 import MoviesCardList from '../MoviesCardList/MoviesCardList';
 import './SavedMovies.css';
 
-export default function SavedMovies() {
+export default function SavedMovies({ savedMoviesUser, onMovieDelete }) {
+  const [filteredMovies, setFilteredMovies] = React.useState([]);
+  const [isSearchDone, setIsSearchDone] = React.useState(false);
 
-  const movies = [
-    {
-      _id: 1,
-      poster: 'https://a-a-ah-ru.s3.amazonaws.com/uploads/items/94462/123032/large_57fea587ab572368559604.jpg',
-      title: 'Бег это свобода',
-      duration: '1ч 44м',
-      isSaved: true,
-    },
-    {
-      _id: 2,
-      poster: 'https://a-a-ah-ru.s3.amazonaws.com/uploads/items/94462/123032/large_57fea587ab572368559604.jpg',
-      title: 'Бег это свобода',
-      duration: '1ч 44м',
-      isSaved: true,
-    },
-    {
-      _id: 3,
-      poster: 'https://a-a-ah-ru.s3.amazonaws.com/uploads/items/94462/123032/large_57fea587ab572368559604.jpg',
-      title: 'Бег это свобода',
-      duration: '1ч 44м',
-      isSaved: true,
-    },
-  ]
+  const [search, setSearch] = React.useState('');
+  const [checkboxStatus, setCheckboxStatus] = React.useState(false);
+
+  function handleSearch(search, checkboxStatus) {
+    setSearch(search);
+    setCheckboxStatus(checkboxStatus);
+    const searchResult = filterMovies(savedMoviesUser, search, checkboxStatus);
+    setFilteredMovies(searchResult);
+    setIsSearchDone(true);
+  }
+
+  useEffect(() => {
+    if (filteredMovies.length > 0) {
+      const searchResult = filterMovies(savedMoviesUser, search, checkboxStatus);
+      setFilteredMovies(searchResult);
+    }
+  }, [checkboxStatus, filteredMovies.length, search, savedMoviesUser]);
+
+  function filterMovies(movies, search, checkboxStatus) {
+    let moviesToFilter = movies;
+    let result;
+    if (checkboxStatus) {
+      moviesToFilter = moviesToFilter.filter((movie) => movie.duration <= 40);
+    }
+    result = moviesToFilter.filter((movie) => {
+      return movie.nameRU.toLowerCase().indexOf(search.toLowerCase()) !== -1;
+    })
+    return result;
+  }
 
   return (
-    <section className="movies">
-      <SearchForm />
-      <MoviesCardList movies={movies} />
+    <section className="saved-movies">
+      <SearchForm
+        onSearch={handleSearch}
+      />
+      {isSearchDone
+        ? filteredMovies.length > 0
+          ? <MoviesCardList
+            movies={filteredMovies}
+            onMovieDelete={onMovieDelete}
+          />
+          : (
+            <span className="saved-movies__nothing-found">
+              Ничего не найдено. Введите другое ключевое слово.
+            </span>
+          )
+        : <MoviesCardList
+          movies={savedMoviesUser}
+          onMovieDelete={onMovieDelete}
+        />
+      }
     </section>
   )
 }

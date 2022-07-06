@@ -1,0 +1,26 @@
+.saved-movies {
+  width: calc(100% - 140px);
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.saved-movies__nothing-found {
+  padding-top: 100px;
+  font-size: 14px;
+  text-align: center;
+}
+
+@media screen and (max-width: 1023px) {
+  .saved-movies {
+    width: calc(100% - 60px);
+  }
+}
+
+@media screen and (max-width: 767px) {
+  .saved-movies {
+    width: calc(100% - 20px);
+    padding-top: 40px;
+  }
+}
